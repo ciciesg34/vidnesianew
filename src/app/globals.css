@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0B0C10;
+  --card: #1F242D;
+  --accent: #10B981;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  background: #0B0C10;
+  color: #FFFFFF;
+  font-family: 'Inter', system-ui, sans-serif;
+  scroll-behavior: smooth;
+  overscroll-behavior-y: none;
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #0B0C10; }
+::-webkit-scrollbar-thumb { background: #1F242D; border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: #10B981; }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.skeleton {
+  background: linear-gradient(90deg, #1F242D 0%, #2A313D 50%, #1F242D 100%);
+  background-size: 1000px 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes shimmer {
+  0% { background-position: -500px 0; }
+  100% { background-position: 500px 0; }
+}
+
+.btn-tap:active {
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
+}
+
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.15);
+}
