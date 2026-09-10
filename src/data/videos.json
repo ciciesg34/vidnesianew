@@ -1,0 +1,16 @@
+[
+  {
+    "id": "v1",
+    "title": "Contoh Video Pertama Vidnesia",
+    "videoUrl": "https://doodstream.com/e/xxxxxx",
+    "thumbnailUrl": "https://placehold.co/640x360/1F242D/10B981?text=Vidnesia+1",
+    "category": "Umum"
+  },
+  {
+    "id": "v2",
+    "title": "Contoh Video Kedua Vidnesia",
+    "videoUrl": "https://doodstream.com/e/yyyyyy",
+    "thumbnailUrl": "https://placehold.co/640x360/1F242D/10B981?text=Vidnesia+2",
+    "category": "Umum"
+  }
+]
