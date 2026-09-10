@@ -8,7 +8,7 @@
     "footerBanner": ""
   },
   "analytics": {
-    "histats": "",
+    "histats": "<script type=\"text/javascript\">var _Hasync= _Hasync|| [];\n_Hasync.push(['Histats.start', '1,5043867,4,511,95,18,00000000']);\n_Hasync.push(['Histats.fasi', '1']);\n_Hasync.push(['Histats.track_hits', '']);\n(function() {\nvar hs = document.createElement('script'); hs.type = 'text/javascript'; hs.async = true;\nhs.src = ('//s10.histats.com/js15_as.js');\n(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);\n})();</script>\n<noscript><a href=\"/\" target=\"_blank\"><img  src=\"//sstatic1.histats.com/0.gif?5043867&101\" alt=\"\" border=\"0\"></a></noscript>",
     "googleAnalytics": ""
   }
 }
