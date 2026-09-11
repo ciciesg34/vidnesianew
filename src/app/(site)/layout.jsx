@@ -1,6 +1,5 @@
 import '../globals.css';
 import { Inter } from 'next/font/google';
-import Script from 'next/script';
 import { getSettings } from '@/lib/settings';
 
 const inter = Inter({
@@ -15,7 +14,7 @@ export const metadata = {
     template: '%s | Vidnesia'
   },
   description: 'Vidnesia - Katalog video streaming modern dengan koleksi lengkap.',
-  metadataBase: new URL('https://vidnesia.vercel.app'),
+  metadataBase: new URL('https://vidnesia.web.id'),
   openGraph: {
     title: 'Vidnesia',
     description: 'Katalog video streaming modern',
@@ -47,31 +46,38 @@ export default function SiteLayout({ children }) {
   return (
     <html lang="id" className={inter.className}>
       <head>
+        {/* Adsterra Pop-up — pakai script tag biasa, bukan next/script */}
         {headPopup && (
-          <Script
-            id="adsterra-head-popup"
-            strategy="beforeInteractive"
+          <div
+            style={{ display: 'none' }}
             dangerouslySetInnerHTML={{ __html: headPopup }}
           />
         )}
+
+        {/* Google Analytics */}
         {ga && (
           <>
-            <Script
+            <script
+              async
               src={`https://www.googletagmanager.com/gtag/js?id=${ga}`}
-              strategy="afterInteractive"
             />
-            <Script id="ga-init" strategy="afterInteractive">
-              {`window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${ga}');`}
-            </Script>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${ga}');
+                `
+              }}
+            />
           </>
         )}
+
+        {/* Histats */}
         {histats && (
-          <Script
-            id="histats-tracker"
-            strategy="afterInteractive"
+          <div
+            style={{ display: 'none' }}
             dangerouslySetInnerHTML={{ __html: histats }}
           />
         )}
