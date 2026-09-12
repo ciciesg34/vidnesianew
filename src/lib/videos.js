@@ -3,7 +3,8 @@ import videos from '@/data/videos.json';
 export const VIDEOS_PER_PAGE = 12;
 
 export function getAllVideos() {
-  return Array.isArray(videos) ? videos : [];
+  if (!Array.isArray(videos)) return [];
+  return [...videos].reverse();
 }
 
 export function getPaginatedVideos(page = 1, perPage = VIDEOS_PER_PAGE) {
