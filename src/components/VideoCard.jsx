@@ -1,19 +1,14 @@
 'use client';
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function VideoCard({ video }) {
   const [imgError, setImgError] = useState(false);
-  const shareText = encodeURIComponent(
-    `🎬 ${video.title}\n\nTonton di Vidnesia:\n${video.videoUrl}`
-  );
-  const waShare = `https://wa.me/?text=${shareText}`;
 
   return (
     <div className="group bg-card rounded-xl overflow-hidden border border-white/5 card-hover">
-      <a
-        href={video.videoUrl}
-        target="_blank"
-        rel="noopener noreferrer"
+      <Link
+        href={`/video/${video.id}`}
         className="block relative aspect-video bg-bg overflow-hidden"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -35,23 +30,25 @@ export default function VideoCard({ video }) {
         <span className="absolute top-2 left-2 bg-black/70 backdrop-blur text-[10px] font-semibold text-accent px-2 py-1 rounded-md uppercase tracking-wide">
           {video.category || 'Umum'}
         </span>
-      </a>
+      </Link>
 
       <div className="p-3">
-        <h3 className="text-sm font-bold leading-snug line-clamp-2 min-h-[2.5rem]">
-          {video.title}
-        </h3>
+        <Link href={`/video/${video.id}`}>
+          <h3 className="text-sm font-bold leading-snug line-clamp-2 min-h-[2.5rem] hover:text-accent transition-colors">
+            {video.title}
+          </h3>
+        </Link>
         <div className="mt-3 flex items-center justify-between gap-2">
-          <a
-            href={video.videoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href={`/video/${video.id}`}
             className="flex-1 text-center text-xs font-semibold bg-accent/10 hover:bg-accent text-accent hover:text-bg py-2 rounded-lg transition-colors btn-tap"
           >
             ▶ Tonton
-          </a>
+          </Link>
           <a
-            href={waShare}
+            href={`https://wa.me/?text=${encodeURIComponent(
+              `🎬 ${video.title}\n\nTonton di Vidnesia:\nhttps://www.vidnesia.web.id/video/${video.id}`
+            )}`}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Share ke WhatsApp"
