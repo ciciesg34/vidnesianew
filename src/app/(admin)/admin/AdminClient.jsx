@@ -103,13 +103,14 @@ function ImportTab() {
       <div className="bg-card border border-white/5 rounded-2xl p-4">
         <h2 className="font-bold mb-2">📥 Batch Import Video</h2>
         <p className="text-xs text-muted mb-3 leading-relaxed">
-          Paste banyak baris sekaligus. Format per baris:<br />
-          <code className="bg-bg px-2 py-1 rounded text-accent text-[11px]">
-            Judul | URL Video | URL Thumbnail | Kategori
-          </code>
-          <br />
-          Data akan <b>ditambahkan</b> (append), bukan menimpa.
-        </p>
+  Paste banyak baris sekaligus. Format per baris:<br />
+  <code className="bg-bg px-2 py-1 rounded text-accent text-[11px]">
+    Judul | URL Video | URL Thumbnail | Kategori | Embed URL (opsional)
+  </code>
+  <br />
+  Kalau Embed URL kosong, otomatis pakai URL Video.<br />
+  Data akan <b>ditambahkan</b> (append), bukan menimpa.
+</p>
 
         <textarea
           value={text}
