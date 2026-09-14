@@ -14,7 +14,14 @@ export const metadata = {
     template: '%s | Vidnesia'
   },
   description: 'Vidnesia - Katalog video streaming modern dengan koleksi lengkap.',
-  metadataBase: new URL('https://vidnesia.web.id'),
+  metadataBase: new URL('https://www.vidnesia.web.id'),
+  manifest: '/manifest.json',
+  themeColor: '#0B0C10',
+  appleWebApp: {
+    capable: true,
+    title: 'Vidnesia',
+    statusBarStyle: 'black-translucent'
+  },
   openGraph: {
     title: 'Vidnesia',
     description: 'Katalog video streaming modern',
@@ -46,7 +53,6 @@ export default function SiteLayout({ children }) {
   return (
     <html lang="id" className={inter.className}>
       <head>
-        {/* Adsterra Pop-up — pakai script tag biasa, bukan next/script */}
         {headPopup && (
           <div
             style={{ display: 'none' }}
@@ -54,7 +60,6 @@ export default function SiteLayout({ children }) {
           />
         )}
 
-        {/* Google Analytics */}
         {ga && (
           <>
             <script
@@ -74,7 +79,6 @@ export default function SiteLayout({ children }) {
           </>
         )}
 
-        {/* Histats */}
         {histats && (
           <div
             style={{ display: 'none' }}
