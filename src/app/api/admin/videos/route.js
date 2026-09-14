@@ -91,12 +91,13 @@ export async function POST(request) {
         );
       }
       newVideos.push({
-        id: `${Date.now()}-${i}-${Math.random().toString(36).slice(2, 8)}`,
-        title,
-        videoUrl,
-        thumbnailUrl: thumbnailUrl || '',
-        category: category || 'Umum'
-      });
+  id: `${Date.now()}-${i}-${Math.random().toString(36).slice(2, 8)}`,
+  title,
+  videoUrl,
+  embedUrl: parts[4] || videoUrl,
+  thumbnailUrl: thumbnailUrl || '',
+  category: category || 'Umum'
+});
     }
 
     const { content, sha } = await getFile();
