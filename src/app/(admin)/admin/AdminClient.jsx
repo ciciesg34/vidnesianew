@@ -103,20 +103,20 @@ function ImportTab() {
       <div className="bg-card border border-white/5 rounded-2xl p-4">
         <h2 className="font-bold mb-2">📥 Batch Import Video</h2>
         <p className="text-xs text-muted mb-3 leading-relaxed">
-  Paste banyak baris sekaligus. Format per baris:<br />
-  <code className="bg-bg px-2 py-1 rounded text-accent text-[11px]">
-    Judul | URL Video | URL Thumbnail | Kategori | Embed URL (opsional)
-  </code>
-  <br />
-  Kalau Embed URL kosong, otomatis pakai URL Video.<br />
-  Data akan <b>ditambahkan</b> (append), bukan menimpa.
-</p>
+          Paste banyak baris sekaligus. Format per baris:<br />
+          <code className="bg-bg px-2 py-1 rounded text-accent text-[11px]">
+            Judul | URL Video | URL Thumbnail | Kategori | Embed URL (opsional)
+          </code>
+          <br />
+          Kalau Embed URL kosong, otomatis pakai URL Video.<br />
+          Data akan <b>ditambahkan</b> (append), bukan menimpa.
+        </p>
 
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
           rows={10}
-          placeholder={`Judul Video 1 | https://doodstream.com/e/xxx | https://img.com/1.jpg | Action\nJudul Video 2 | https://doodstream.com/e/yyy | https://img.com/2.jpg | Drama`}
+          placeholder={`Judul Video 1 | https://vstr.in/e/abc | https://img.com/1.jpg | Action | https://vstr.in/e/abc\nJudul Video 2 | https://vstr.in/e/def | https://img.com/2.jpg | Drama`}
           className="w-full bg-bg border border-white/10 rounded-xl px-3 py-3 text-sm outline-none focus:border-accent transition-colors font-mono resize-y"
         />
 
@@ -145,7 +145,7 @@ function ImportTab() {
                     <b className="text-white">{p.parts[0]}</b> • {p.parts[3] || 'Umum'}
                   </div>
                 ) : (
-                  <div className="text-red-400 mt-1">Format tidak lengkap (butuh 4 bagian dengan | )</div>
+                  <div className="text-red-400 mt-1">Format tidak lengkap (butuh minimal 4 bagian dengan | )</div>
                 )}
               </div>
             ))}
