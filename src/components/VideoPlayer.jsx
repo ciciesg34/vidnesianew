@@ -23,7 +23,7 @@ function detectSourceType(url) {
       u.includes('mp4upload') ||
       u.includes('upstream') ||
       u.includes('netu.tv') ||
-      u.includes('ok.ru')) {
+      u.includes('vidmonstr.com')) {
     return 'iframe';
   }
 
@@ -31,7 +31,7 @@ function detectSourceType(url) {
   if (u.includes('/e/') ||
       u.includes('/embed') ||
       u.includes('/v/') ||
-      u.includes('/watch/') ||
+      u.includes('/d/') ||
       u.includes('/player/') ||
       u.includes('/iframe/')) {
     return 'iframe';
