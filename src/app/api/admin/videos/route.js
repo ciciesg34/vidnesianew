@@ -83,7 +83,7 @@ export async function POST(request) {
           { status: 400 }
         );
       }
-      const [title, videoUrl, thumbnailUrl, category] = parts;
+      const [title, videoUrl, thumbnailUrl, category, embedUrl] = parts;
       if (!title || !videoUrl) {
         return NextResponse.json(
           { error: `Baris ${i + 1}: Judul dan URL Video wajib diisi.` },
@@ -91,13 +91,13 @@ export async function POST(request) {
         );
       }
       newVideos.push({
-  id: `${Date.now()}-${i}-${Math.random().toString(36).slice(2, 8)}`,
-  title,
-  videoUrl,
-  embedUrl: parts[4] || videoUrl,
-  thumbnailUrl: thumbnailUrl || '',
-  category: category || 'Umum'
-});
+        id: `${Date.now()}-${i}-${Math.random().toString(36).slice(2, 8)}`,
+        title,
+        videoUrl,
+        embedUrl: embedUrl || videoUrl,
+        thumbnailUrl: thumbnailUrl || '',
+        category: category || 'Umum'
+      });
     }
 
     const { content, sha } = await getFile();
