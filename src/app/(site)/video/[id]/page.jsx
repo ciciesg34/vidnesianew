@@ -36,10 +36,8 @@ export default function VideoDetail({ params }) {
     <>
       <Header />
       <main className="max-w-4xl mx-auto px-3 sm:px-6 py-5">
-        {/* Player Embed — TIDAK ada Adsterra di area ini */}
         <VideoPlayer video={video} />
 
-        {/* Info Video */}
         <div className="mt-4 bg-card rounded-xl p-4 border border-white/5">
           <span className="inline-block text-[10px] font-bold text-accent bg-accent/10 px-2 py-1 rounded uppercase tracking-wide mb-2">
             {video.category || 'Umum'}
