@@ -5,6 +5,9 @@ import VideoGrid from '@/components/VideoGrid';
 import Pagination from '@/components/Pagination';
 import EmptyState from '@/components/EmptyState';
 import AdBanner from '@/components/AdBanner';
+import TrendingSection from '@/components/TrendingSection';
+import CategorySection from '@/components/CategorySection';
+import SocialSection from '@/components/SocialSection';
 import { getAllCategories, getPaginatedVideos } from '@/lib/videos';
 import { getAds } from '@/lib/settings';
 
@@ -26,6 +29,8 @@ export default function HomePage() {
       <main className="max-w-7xl mx-auto px-3 sm:px-6 py-5">
         <AdBanner code={ads.headerBanner} label="Iklan" />
 
+        <TrendingSection />
+
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-lg sm:text-xl font-extrabold">
             Video <span className="text-accent">Terbaru</span>
@@ -42,6 +47,14 @@ export default function HomePage() {
         )}
 
         <Pagination currentPage={currentPage} totalPages={totalPages} basePath="home" />
+
+        <div className="mt-8">
+          <CategorySection />
+        </div>
+
+        <div className="mt-6">
+          <SocialSection />
+        </div>
       </main>
 
       <Footer />
