@@ -5,7 +5,6 @@ export default function VideoPlayer({ video }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  // Ambil URL embed: prioritas embedUrl, fallback ke videoUrl
   const embedSource = video.embedUrl || video.videoUrl;
 
   if (error) {
