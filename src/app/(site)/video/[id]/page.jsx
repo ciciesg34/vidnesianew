@@ -38,12 +38,12 @@ export default function VideoDetail({ params }) {
       <VideoSchema video={video} />
       <Header />
       <main className="max-w-4xl mx-auto px-3 sm:px-6 py-5">
-        {/* PLAYER IFRAME — TIDAK ada Adsterra di area ini */}
+        {/* PLAYER PORTRAIT 9:16 — TIDAK ada Adsterra di area ini */}
         <div className="bg-black rounded-xl overflow-hidden border border-white/5">
-          <div className="aspect-video bg-bg">
+          <div className="aspect-[9/16] max-w-md mx-auto bg-bg relative">
             <iframe
               src={embedUrl}
-              className="w-full h-full"
+              className="absolute inset-0 w-full h-full"
               frameBorder="0"
               allowFullScreen
               allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
