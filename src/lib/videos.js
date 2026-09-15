@@ -2,6 +2,42 @@ import videos from '@/data/videos.json';
 
 export const VIDEOS_PER_PAGE = 12;
 
+// Extract kode dari URL video
+// Contoh: https://tribunvideo.com/e/8vo8sl1ii631 → 8vo8sl1ii631
+export function extractCodeFromUrl(url) {
+  if (!url || typeof url !== 'string') return '';
+  try {
+    const cleaned = url.split('?')[0].split('#')[0];
+    const parts = cleaned.split('/').filter(Boolean);
+    const last = parts[parts.length - 1] || '';
+    return last.replace(/\.[^.]*$/, '').toLowerCase();
+  } catch {
+    return '';
+  }
+}
+
+// Bersihkan judul dari simbol & ekstensi
+// Contoh: "▶ 1000248000.mp4" → "1000248000"
+export function cleanTitle(raw) {
+  if (!raw) return '';
+  return raw
+    .replace(/[▶►●•·◆★☆✓✔⬤◆]/g, '')
+    .replace(/\.(mp4|mkv|avi|mov|webm|flv|wmv|m4v)$/i, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// Generate slug kategori
+function slugifyCategory(cat) {
+  return (cat || 'umum')
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '') || 'umum';
+}
+
 export function getAllVideos() {
   if (!Array.isArray(videos)) return [];
   return [...videos].reverse();
@@ -61,6 +97,17 @@ export function getAllCategories() {
   return Array.from(set).sort();
 }
 
+// Cari video by id (kode baru) ATAU id lama (backward compatible)
 export function getVideoById(id) {
-  return getAllVideos().find((v) => v.id === id) || null;
+  if (!id) return null;
+  const all = getAllVideos();
+  return all.find((v) => v.id === id) || null;
+}
+
+// Tampilkan judul: pakai title asli, atau fallback ke "Video [KATEGORI]"
+export function getDisplayTitle(video) {
+  if (!video) return '';
+  const cleaned = cleanTitle(video.title || '');
+  if (cleaned) return cleaned;
+  return `Video ${video.category || 'Umum'}`;
 }
