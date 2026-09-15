@@ -4,22 +4,23 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import VideoSchema from '@/components/VideoSchema';
 import WatchlistButton from '@/components/WatchlistButton';
-import { getVideoById } from '@/lib/videos';
+import { getVideoById, getDisplayTitle } from '@/lib/videos';
 
 export async function generateMetadata({ params }) {
   const video = getVideoById(params.id);
   if (!video) return { title: 'Video tidak ditemukan' };
+  const title = getDisplayTitle(video);
   return {
-    title: video.title,
-    description: `Tonton ${video.title} di Vidnesia.`,
+    title,
+    description: `Tonton ${title} di Vidnesia.`,
     openGraph: {
-      title: video.title,
-      description: `Tonton ${video.title} di Vidnesia.`,
+      title,
+      description: `Tonton ${title} di Vidnesia.`,
       images: video.thumbnailUrl ? [video.thumbnailUrl] : ['/logo.png']
     },
     twitter: {
       card: 'summary_large_image',
-      title: video.title,
+      title,
       images: video.thumbnailUrl ? [video.thumbnailUrl] : ['/logo.png']
     }
   };
@@ -30,13 +31,14 @@ export default function VideoDetail({ params }) {
   if (!video) notFound();
 
   const embedUrl = video.embedUrl || video.videoUrl;
+  const displayTitle = getDisplayTitle(video);
 
   return (
     <>
       <VideoSchema video={video} />
       <Header />
       <main className="max-w-4xl mx-auto px-3 sm:px-6 py-5">
-        {/* PLAYER IFRAME — TIDAK ada Adsterra */}
+        {/* PLAYER IFRAME — TIDAK ada Adsterra di area ini */}
         <div className="bg-black rounded-xl overflow-hidden border border-white/5">
           <div className="aspect-video bg-bg">
             <iframe
@@ -56,14 +58,14 @@ export default function VideoDetail({ params }) {
             {video.category || 'Umum'}
           </span>
           <h1 className="text-lg sm:text-2xl font-extrabold leading-snug mb-4">
-            {video.title}
+            {displayTitle}
           </h1>
 
           <div className="flex gap-2 flex-wrap">
             <WatchlistButton video={video} />
             <a
               href={`https://wa.me/?text=${encodeURIComponent(
-                `🎬 ${video.title}\n\nTonton di Vidnesia:\nhttps://www.vidnesia.web.id/video/${video.id}`
+                `🎬 ${displayTitle}\n\nTonton di Vidnesia:\nhttps://www.vidnesia.web.id/video/${video.id}`
               )}`}
               target="_blank"
               rel="noopener noreferrer"
