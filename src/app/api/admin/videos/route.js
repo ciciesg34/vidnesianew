@@ -11,6 +11,63 @@ function authCheck() {
   return token && token === process.env.ADMIN_SESSION_SECRET;
 }
 
+// Extract kode dari URL video
+function extractCode(url) {
+  if (!url) return '';
+  try {
+    const cleaned = url.split('?')[0].split('#')[0];
+    const parts = cleaned.split('/').filter(Boolean);
+    const last = parts[parts.length - 1] || '';
+    return last.replace(/\.[^.]*$/, '').toLowerCase();
+  } catch {
+    return '';
+  }
+}
+
+// Slugify kategori
+function slugifyCategory(cat) {
+  return (cat || 'umum')
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '') || 'umum';
+}
+
+// Bersihkan judul dari simbol
+function cleanTitle(raw) {
+  if (!raw) return '';
+  return raw
+    .replace(/[▶►●•·◆★☆✓✔]/g, '')
+    .replace(/\.(mp4|mkv|avi|mov|webm|flv|wmv|m4v)$/i, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// Generate ID: [kategori]-[kodeURL]
+function generateId(category, videoUrl, existingIds = []) {
+  const cat = slugifyCategory(category);
+  const code = extractCode(videoUrl);
+  
+  let base;
+  if (code) {
+    base = `${cat}-${code}`;
+  } else {
+    base = `${cat}-${Date.now().toString(36)}`;
+  }
+  
+  // Cek duplikat
+  let finalId = base;
+  let counter = 2;
+  while (existingIds.includes(finalId)) {
+    finalId = `${base}-${counter}`;
+    counter++;
+  }
+  
+  return finalId;
+}
+
 async function getFile() {
   const res = await fetch(
     `https://api.github.com/repos/${REPO}/contents/${PATH}?ref=${BRANCH}`,
@@ -72,34 +129,7 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Tidak ada data untuk diimport' }, { status: 400 });
     }
 
-    const newVideos = [];
-    for (let i = 0; i < lines.length; i++) {
-      const raw = (lines[i] || '').trim();
-      if (!raw) continue;
-      const parts = raw.split('|').map((s) => s.trim());
-      if (parts.length < 4) {
-        return NextResponse.json(
-          { error: `Baris ${i + 1} tidak valid. Format: Judul | URL Video | URL Thumbnail | Kategori` },
-          { status: 400 }
-        );
-      }
-      const [title, videoUrl, thumbnailUrl, category, embedUrl] = parts;
-      if (!title || !videoUrl) {
-        return NextResponse.json(
-          { error: `Baris ${i + 1}: Judul dan URL Video wajib diisi.` },
-          { status: 400 }
-        );
-      }
-      newVideos.push({
-        id: `${Date.now()}-${i}-${Math.random().toString(36).slice(2, 8)}`,
-        title,
-        videoUrl,
-        embedUrl: embedUrl || videoUrl,
-        thumbnailUrl: thumbnailUrl || '',
-        category: category || 'Umum'
-      });
-    }
-
+    // Ambil data existing dulu
     const { content, sha } = await getFile();
     let existing = [];
     try {
@@ -107,6 +137,58 @@ export async function POST(request) {
       if (!Array.isArray(existing)) existing = [];
     } catch {
       existing = [];
+    }
+
+    const existingIds = existing.map((v) => v.id);
+
+    const newVideos = [];
+    for (let i = 0; i < lines.length; i++) {
+      const raw = (lines[i] || '').trim();
+      if (!raw) continue;
+
+      const parts = raw.split('|').map((s) => s.trim());
+
+      // Support 3 format:
+      // 1. [Judul] | URL | Thumb | Kategori | EmbedURL
+      // 2. | URL | Thumb | Kategori | EmbedURL
+      // 3. [Judul] | URL | Thumb | Kategori
+      
+      let title = '', videoUrl = '', thumbnailUrl = '', category = '', embedUrl = '';
+
+      if (parts.length >= 5) {
+        [title, videoUrl, thumbnailUrl, category, embedUrl] = parts;
+      } else if (parts.length === 4) {
+        [title, videoUrl, thumbnailUrl, category] = parts;
+      } else if (parts.length === 3) {
+        [videoUrl, thumbnailUrl, category] = parts;
+      } else {
+        return NextResponse.json(
+          { error: `Baris ${i + 1} tidak valid. Format: Judul | URL | Thumb | Kategori | EmbedURL` },
+          { status: 400 }
+        );
+      }
+
+      if (!videoUrl) {
+        return NextResponse.json(
+          { error: `Baris ${i + 1}: URL Video wajib diisi.` },
+          { status: 400 }
+        );
+      }
+
+      // Bersihkan judul
+      title = cleanTitle(title);
+
+      // Auto-generate ID dari kategori + kode URL
+      const id = generateId(category || 'Umum', videoUrl, [...existingIds, ...newVideos.map((v) => v.id)]);
+
+      newVideos.push({
+        id,
+        title: title || '', // Boleh kosong
+        videoUrl,
+        embedUrl: embedUrl || videoUrl,
+        thumbnailUrl: thumbnailUrl || '',
+        category: category || 'Umum'
+      });
     }
 
     const merged = [...existing, ...newVideos];
