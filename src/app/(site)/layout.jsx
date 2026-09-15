@@ -1,6 +1,7 @@
 import '../globals.css';
 import { Inter } from 'next/font/google';
 import { getSettings } from '@/lib/settings';
+import SocialBarRenderer from '@/components/SocialBarRenderer';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -16,7 +17,6 @@ export const metadata = {
   description: 'Vidnesia - Katalog video streaming modern dengan koleksi lengkap.',
   metadataBase: new URL('https://www.vidnesia.web.id'),
   manifest: '/manifest.json',
-  themeColor: '#0B0C10',
   appleWebApp: {
     capable: true,
     title: 'Vidnesia',
@@ -47,6 +47,7 @@ export const viewport = {
 export default function SiteLayout({ children }) {
   const settings = getSettings();
   const headPopup = settings?.ads?.headPopup || '';
+  const socialBar = settings?.ads?.socialBar || '';
   const histats = settings?.analytics?.histats || '';
   const ga = settings?.analytics?.googleAnalytics || '';
 
@@ -88,6 +89,9 @@ export default function SiteLayout({ children }) {
       </head>
       <body className="bg-bg text-white antialiased min-h-screen">
         {children}
+
+        {/* Social Bar — otomatis tidak muncul di /admin dan /video/* */}
+        <SocialBarRenderer html={socialBar} />
       </body>
     </html>
   );
