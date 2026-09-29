@@ -1,13 +1,5 @@
-import '../globals.css';
-import { Inter } from 'next/font/google';
 import { getSettings } from '@/lib/settings';
 import SocialBarRenderer from '@/components/SocialBarRenderer';
-
-const inter = Inter({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
-  display: 'swap'
-});
 
 export const metadata = {
   title: {
@@ -15,7 +7,6 @@ export const metadata = {
     template: '%s | Vidnesia'
   },
   description: 'Vidnesia - Katalog video streaming modern dengan koleksi lengkap.',
-  metadataBase: new URL('https://www.vidnesia.web.id'),
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
@@ -37,13 +28,6 @@ export const metadata = {
   }
 };
 
-export const viewport = {
-  themeColor: '#0B0C10',
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 5
-};
-
 export default function SiteLayout({ children }) {
   const settings = getSettings();
   const headPopup = settings?.ads?.headPopup || '';
@@ -52,47 +36,43 @@ export default function SiteLayout({ children }) {
   const ga = settings?.analytics?.googleAnalytics || '';
 
   return (
-    <html lang="id" className={inter.className}>
-      <head>
-        {headPopup && (
-          <div
-            style={{ display: 'none' }}
-            dangerouslySetInnerHTML={{ __html: headPopup }}
+    <>
+      {headPopup && (
+        <div
+          style={{ display: 'none' }}
+          dangerouslySetInnerHTML={{ __html: headPopup }}
+        />
+      )}
+
+      {ga && (
+        <>
+          <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${ga}`}
           />
-        )}
-
-        {ga && (
-          <>
-            <script
-              async
-              src={`https://www.googletagmanager.com/gtag/js?id=${ga}`}
-            />
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', '${ga}');
-                `
-              }}
-            />
-          </>
-        )}
-
-        {histats && (
-          <div
-            style={{ display: 'none' }}
-            dangerouslySetInnerHTML={{ __html: histats }}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${ga}');
+              `
+            }}
           />
-        )}
-      </head>
-      <body className="bg-bg text-white antialiased min-h-screen">
-        {children}
+        </>
+      )}
 
-        {/* Social Bar — otomatis tidak muncul di /admin dan /video/* */}
-        <SocialBarRenderer html={socialBar} />
-      </body>
-    </html>
+      {histats && (
+        <div
+          style={{ display: 'none' }}
+          dangerouslySetInnerHTML={{ __html: histats }}
+        />
+      )}
+
+      {children}
+
+      <SocialBarRenderer html={socialBar} />
+    </>
   );
 }
