@@ -21,6 +21,7 @@ export function middleware(request) {
 
   // 2. PROTEKSI CAPTCHA HOMEPAGE
   // Match: '/' saja (homepage)
+  // Tapi TIDAK match: /verify, /admin, /api, /_next, /search, /kategori, /video, /watchlist
   if (pathname === '/') {
     const verified = request.cookies.get(VERIFY_COOKIE)?.value;
 
@@ -37,7 +38,7 @@ export function middleware(request) {
 
 export const config = {
   matcher: [
-    '/',
-    '/admin/:path*'
+    // Match semua path KECUALI yang di-exclude
+    '/((?!api|_next/static|_next/image|favicon.ico|verify|admin|search|kategori|video|watchlist|logo.png|fallback-thumb.jpg|manifest.json|sitemap.xml|robots.txt).*)',
   ]
 };
