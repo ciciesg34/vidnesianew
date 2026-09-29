@@ -6,9 +6,7 @@ const VERIFY_COOKIE = 'vidnesia_verified';
 export function middleware(request) {
   const { pathname } = request.nextUrl;
 
-  // ========================================
-  // 1. PROTEKSI ADMIN (yang sudah ada)
-  // ========================================
+  // 1. PROTEKSI ADMIN
   if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
     const token = request.cookies.get(COOKIE_NAME)?.value;
     const secret = process.env.ADMIN_SESSION_SECRET;
@@ -21,14 +19,11 @@ export function middleware(request) {
     }
   }
 
-  // ========================================
-  // 2. PROTEKSI CAPTCHA HOMEPAGE (BARU)
-  // ========================================
-  // Hanya proteksi homepage (pathname === '/')
+  // 2. PROTEKSI CAPTCHA HOMEPAGE
+  // Match: '/' saja (homepage)
   if (pathname === '/') {
     const verified = request.cookies.get(VERIFY_COOKIE)?.value;
 
-    // Kalau belum verifikasi → redirect ke /verify
     if (!verified || verified !== 'true') {
       const url = request.nextUrl.clone();
       url.pathname = '/verify';
@@ -37,13 +32,12 @@ export function middleware(request) {
     }
   }
 
-  // Kalau sudah verifikasi atau bukan homepage → lanjut normal
   return NextResponse.next();
 }
 
 export const config = {
   matcher: [
-    '/admin/:path*',
-    '/'
+    '/',
+    '/admin/:path*'
   ]
 };
